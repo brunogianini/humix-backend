@@ -13,7 +13,14 @@ export async function buscarBandaPorId(id: string){
 }
 
 export async function buscarBandaPorUsuario(userId: string){
-    const usuario = await prisma.user.findUnique({where: {id: userId}, include: {banda: true}})
+    const usuario = await prisma.user.findUnique({
+        where: { id: userId },
+        include: { 
+            banda: { 
+                include: { albums: true } 
+            } 
+        }
+    })
 
     return usuario?.banda ?? []
 }
