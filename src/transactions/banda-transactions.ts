@@ -17,3 +17,19 @@ export async function buscarBandaPorUsuario(userId: string){
 
     return albums
 }
+
+export async function usuarioSeguirBanda(userId: string, bandaId: string){
+    const segue = await prisma.banda.findFirst({
+        where: {
+            id: bandaId,
+            segudores: { some: { id: userId } }
+        }
+    })
+
+    if (!segue) {
+        await prisma.banda.update({
+            where: { id: bandaId },
+            data: { segudores: { connect: { id: userId } } }
+        });
+    }
+}

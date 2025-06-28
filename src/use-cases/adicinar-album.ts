@@ -1,5 +1,5 @@
 import { criarAlbum } from "../transactions/album-transactions";
-import { criarBanda } from "../transactions/banda-transactions";
+import { criarBanda, usuarioSeguirBanda } from "../transactions/banda-transactions";
 import { prisma } from "../utils/prisma";
 import { searchAlbum } from "../utils/spotify";
 
@@ -23,5 +23,6 @@ export async function adicionarAlbumAoUsuario(userId: string, nome_input: string
     }
 
     const usuarioAtualizado = await prisma.user.update({where: {id: userId}, data: {albums: {connect: {id: album_db.id}}}, include: {albums: true}})
+    usuarioSeguirBanda(userId, banda_db.id)
     return album_db
 }
