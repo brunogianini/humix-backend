@@ -1,7 +1,7 @@
 import { criarAlbum } from "../transactions/album-transactions";
 import { criarBanda, usuarioSeguirBanda } from "../transactions/banda-transactions";
 import { prisma } from "../utils/prisma";
-import { searchAlbum } from "../utils/spotify";
+import { getBandImage, searchAlbum } from "../utils/spotify";
 
 export async function adicionarAlbumAoUsuario(userId: string, nome_input: string, banda_input: string){
     
@@ -13,9 +13,10 @@ export async function adicionarAlbumAoUsuario(userId: string, nome_input: string
 
     let banda_db = await prisma.banda.findFirst({where: {nome: banda}})
     let album_db = await prisma.album.findFirst({where: {nome}, include: {banda: true}})
+    let foto = await getBandImage(album_data.artists[0].id)
 
     if(!banda_db){
-        banda_db = await criarBanda(banda)
+        banda_db = await criarBanda(banda, foto)
     }
 
     if(!album_db){

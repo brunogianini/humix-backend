@@ -25,3 +25,18 @@ export async function searchAlbum(name: String, banda: String) {
 
     return data.albums.items[0]
 }
+
+export async function getBandImage(id: String){
+    const token = await getSpotifyAuthToken()
+
+
+    const response = await fetch(` https://api.spotify.com/v1/artists/${id}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+
+    const data = await response.json()
+
+    return data.images[0].url
+}

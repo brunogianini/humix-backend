@@ -38,6 +38,7 @@ model Banda {
   id String @id @default(uuid())
 
   nome String
+  foto String
 
   albums Album[]
   segudores User[]

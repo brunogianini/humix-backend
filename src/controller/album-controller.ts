@@ -13,6 +13,7 @@ export async function adicionarAlbum(req: Request, res: Response){
     }
     
     catch(err){
+        console.log(err)
         res.status(500).json({message: err})
     }
     

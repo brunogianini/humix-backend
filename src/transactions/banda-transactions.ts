@@ -1,7 +1,7 @@
 import { prisma } from "../utils/prisma";
 
-export async function criarBanda(nome: string){
-    const banda = await prisma.banda.create({data: {nome}})
+export async function criarBanda(nome: string, foto: string){
+    const banda = await prisma.banda.create({data: {nome, foto}})
 
     return banda
 }
@@ -13,14 +13,7 @@ export async function buscarBandaPorId(id: string){
 }
 
 export async function buscarBandaPorUsuario(userId: string){
-    const usuario = await prisma.user.findUnique({
-        where: { id: userId },
-        include: { 
-            banda: { 
-                include: { albums: true } 
-            } 
-        }
-    })
+    const usuario = await prisma.user.findUnique({where: { id: userId }, include: {banda: {include: { albums: true }}}})
 
     return usuario?.banda ?? []
 }
