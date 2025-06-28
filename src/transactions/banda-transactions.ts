@@ -13,9 +13,9 @@ export async function buscarBandaPorId(id: string){
 }
 
 export async function buscarBandaPorUsuario(userId: string){
-    const albums = await prisma.user.findMany({where: {id: userId}, include: {banda: true}})
+    const usuario = await prisma.user.findUnique({where: {id: userId}, include: {banda: true}})
 
-    return albums
+    return usuario?.banda ?? []
 }
 
 export async function usuarioSeguirBanda(userId: string, bandaId: string){
