@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { buscarAlbumPorUsuário, buscarAlbumsNaoAvaliados } from "../transactions/album-transactions";
+import { buscarAlbumsNaoAvaliados } from "../transactions/album-transactions";
 
 export async function buscarAlbums(req: Request, res: Response){
     const { userId } = req.params

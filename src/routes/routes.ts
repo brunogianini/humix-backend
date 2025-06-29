@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { adicionarAlbum, avaliarAlbumUsuario, buscarAvaliacoesUsuario } from "../controller/album-controller"
+import { adicionarAlbum, avaliarAlbumUsuario, buscarAvaliacoesUsuario, removerAlbumUsuario } from "../controller/album-controller"
 import { buscarAlbums } from "../use-cases/buscar-albums"
 import { login } from "../use-cases/login-usuario"
 import { registroUsuario } from "../use-cases/registro-usuario"
@@ -12,6 +12,7 @@ router.post("/adicionar", adicionarAlbum)
 router.get("/albums/:userId", buscarAlbums)
 router.post("/avaliar", avaliarAlbumUsuario)
 router.get("/avaliacoes/:userId", buscarAvaliacoesUsuario)
+router.post("/remover", removerAlbumUsuario)
 
 //Usuário
 router.post("/login", login)

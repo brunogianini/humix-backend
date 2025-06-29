@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { adicionarAlbumAoUsuario } from "../use-cases/adicinar-album";
 import { avaliarAlbum } from "../use-cases/avaliar-album";
 import { avaliacoesUsuario } from "../use-cases/avaliados-usuario";
+import { removerAlbumDoUsuario } from "../transactions/album-transactions";
 
 export async function adicionarAlbum(req: Request, res: Response){
     const { userId, nome, banda } = req.body
@@ -42,5 +43,17 @@ export async function buscarAvaliacoesUsuario(req: Request, res: Response){
     }catch(err){
         console.log(err)
         res.status(500).json({message: "Não foi carregar os álbums avaliados"})
+    }
+}
+
+export async function removerAlbumUsuario(req: Request, res: Response){
+    const { userId, albumId } = req.body
+
+    try{
+        const album = await removerAlbumDoUsuario(userId, albumId)
+        res.status(201).json({message: "O album foi excluído com sucesso"})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({message: "Não foi possível deletar o álbum"})
     }
 }
