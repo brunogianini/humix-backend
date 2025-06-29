@@ -13,9 +13,32 @@ export async function buscarBandaPorId(id: string){
 }
 
 export async function buscarBandaPorUsuario(userId: string){
-    const usuario = await prisma.user.findUnique({where: { id: userId }, include: {banda: {include: { albums: true }}}})
+    const usuario = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+            banda: {
+                include: {
+                    albums: {
+                        include: {
+                            avaliacoes: {
+                                where: { userId }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
 
-    return usuario?.banda ?? []
+    const bandas = (usuario?.banda ?? []).map(banda => ({
+        ...banda,
+        albums: banda.albums.map(album => ({
+            ...album,
+            nota: album.avaliacoes[0]?.nota ?? null
+        }))
+    }));
+
+    return bandas;
 }
 
 export async function usuarioSeguirBanda(userId: string, bandaId: string){
