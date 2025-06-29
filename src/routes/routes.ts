@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { adicionarAlbum } from "../controller/album-controller"
+import { adicionarAlbum, avaliarAlbumUsuario } from "../controller/album-controller"
 import { buscarAlbums } from "../use-cases/buscar-albums"
 import { login } from "../use-cases/login-usuario"
 import { registroUsuario } from "../use-cases/registro-usuario"
@@ -10,6 +10,7 @@ const router = Router()
 //Album
 router.post("/adicionar", adicionarAlbum)
 router.get("/albums/:userId", buscarAlbums)
+router.post("/avaliar", avaliarAlbumUsuario)
 
 //Usuário
 router.post("/login", login)
