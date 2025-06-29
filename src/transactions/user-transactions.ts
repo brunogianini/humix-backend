@@ -50,3 +50,21 @@ export async function listarTodosUsuarios(userId: string) {
 
     return usuarios;
 }
+
+export async function listarUsuariosSeguidos(userId: string) {
+    const usuario = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+            seguindo: {
+                select: {
+                    id: true,
+                    nome: true,
+                    email: true
+                }
+            }
+        }
+    });
+
+    // Retorna apenas a lista de usuários seguidos
+    return usuario?.seguindo ?? [];
+}
