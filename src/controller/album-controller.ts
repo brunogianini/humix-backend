@@ -8,8 +8,6 @@ export async function adicionarAlbum(req: Request, res: Response){
     const { userId, nome, banda } = req.body
 
     try{
-        
-
         const album = await adicionarAlbumAoUsuario(userId, nome, banda)
 
         res.status(201).json({album})

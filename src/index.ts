@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import cors from "cors"
 import router from './routes/routes'
+require('dotenv').config()
 
 const app = express()
 app.use(express.json())
