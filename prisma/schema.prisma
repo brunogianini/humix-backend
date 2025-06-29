@@ -21,8 +21,10 @@ model User {
 
   albums Album[]
   banda Banda[]
-
   avaliacoes AvaliacaoAlbum[]
+
+  seguindo User[] @relation("UserSegue")
+  seguidores User[] @relation("UserSegue")
 }
 
 model Album {

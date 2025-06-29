@@ -14,3 +14,26 @@ export async function loginUsuario(email: string, senha: string) {
     
     return usuario
 }
+
+export async function buscarUsuarioPorNome(nome: string){
+    const usuario = await prisma.user.findFirst({where: {nome}})
+    return usuario
+}
+
+export async function seguirUsuario(userId: string, alvoId: string){
+    const seguir = await prisma.user.update({where: {id: userId}, data: {seguindo: {connect: {id: alvoId}}}})
+    return seguir
+}
+
+export async function listarTodosUsuarios(){
+    const usuarios = await prisma.user.findMany({
+        select: {
+            id: true,
+            nome: true,
+            email: true
+            // Não inclui o campo senha
+        }
+    });
+
+    return usuarios;
+}

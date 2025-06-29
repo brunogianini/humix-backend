@@ -4,6 +4,7 @@ import { buscarAlbums } from "../use-cases/buscar-albums"
 import { login } from "../use-cases/login-usuario"
 import { registroUsuario } from "../use-cases/registro-usuario"
 import { buscarBandaUsuario } from "../controller/banda-controller"
+import { listarUsuarios, usuarioSeguirAlvo } from "../controller/usuario-controller"
 
 const router = Router()
 
@@ -18,5 +19,7 @@ router.post("/remover", removerAlbumUsuario)
 router.post("/login", login)
 router.post("/registrar", registroUsuario)
 router.get("/bandas/:userId", buscarBandaUsuario)
+router.post("/seguir", usuarioSeguirAlvo)
+router.get("/usuarios", listarUsuarios)
 
 export default router
