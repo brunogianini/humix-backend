@@ -21,8 +21,19 @@ export async function buscarUsuarioPorNome(nome: string){
 }
 
 export async function seguirUsuario(userId: string, alvoId: string){
-    const seguir = await prisma.user.update({where: {id: userId}, data: {seguindo: {connect: {id: alvoId}}}})
-    return seguir
+    // Checa se ambos os usuários existem
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const alvo = await prisma.user.findUnique({ where: { id: alvoId } });
+
+    if (!user || !alvo) {
+        throw new Error("Usuário ou alvo não encontrado");
+    }
+
+    const seguir = await prisma.user.update({
+        where: { id: userId },
+        data: { seguindo: { connect: { id: alvoId } } }
+    });
+    return seguir;
 }
 
 export async function listarTodosUsuarios(userId: string) {
