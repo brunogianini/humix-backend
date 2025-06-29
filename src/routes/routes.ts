@@ -20,6 +20,6 @@ router.post("/login", login)
 router.post("/registrar", registroUsuario)
 router.get("/bandas/:userId", buscarBandaUsuario)
 router.post("/seguir", usuarioSeguirAlvo)
-router.get("/usuarios", listarUsuarios)
+router.get("/usuarios/:userId", listarUsuarios)
 
 export default router

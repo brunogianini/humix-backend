@@ -25,13 +25,26 @@ export async function seguirUsuario(userId: string, alvoId: string){
     return seguir
 }
 
-export async function listarTodosUsuarios(){
+export async function listarTodosUsuarios(userId: string) {
+    // Busca os usuários que o userId já segue
+    const usuario = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { seguindo: { select: { id: true } } }
+    });
+
+    const idsSeguindo = usuario?.seguindo.map(u => u.id) ?? [];
+    // Inclui o próprio userId para não retornar ele mesmo
+    idsSeguindo.push(userId);
+
+    // Busca todos os usuários que NÃO estão na lista acima
     const usuarios = await prisma.user.findMany({
+        where: {
+            id: { notIn: idsSeguindo }
+        },
         select: {
             id: true,
             nome: true,
             email: true
-            // Não inclui o campo senha
         }
     });
 
