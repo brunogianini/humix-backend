@@ -17,3 +17,9 @@ export async function buscarAlbumaAvaliado(userId: string){
 
     return avaliacoes.map(avaliacao => ({album: avaliacao.album, nota: avaliacao.nota}))
 }
+
+export async function buscarAlbumsNaoAvaliados(userId: string){
+    const albums = await prisma.album.findMany({where: {avaliacoes: {none: {userId}}}, include: {banda: true}})
+
+    return albums
+}
