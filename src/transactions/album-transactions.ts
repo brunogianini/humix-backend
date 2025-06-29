@@ -43,6 +43,19 @@ export async function buscarAlbumsNaoAvaliados(userId: string) {
 }
 
 export async function removerAlbumDoUsuario(userId: string, albumId: string) {
+    // Descobre a banda do álbum a ser removido
+    const album = await prisma.album.findUnique({
+        where: { id: albumId },
+        select: { bandaId: true }
+    });
+    if (!album) return { message: "Álbum não encontrado." };
+
+    // Remove avaliações do usuário para o álbum
+    await prisma.avaliacaoAlbum.deleteMany({
+        where: { userId, albumId }
+    });
+
+    // Remove o álbum da lista do usuário
     await prisma.user.update({
         where: { id: userId },
         data: {
@@ -51,5 +64,28 @@ export async function removerAlbumDoUsuario(userId: string, albumId: string) {
             }
         }
     });
+
+    // Verifica se o usuário ainda tem algum álbum dessa banda
+    const albunsRestantes = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+            albums: {
+                where: { bandaId: album.bandaId }
+            }
+        }
+    });
+
+    if (albunsRestantes && albunsRestantes.albums.length === 0) {
+        // Remove a banda do usuário
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                banda: {
+                    disconnect: { id: album.bandaId }
+                }
+            }
+        });
+    }
+
     return { message: "Álbum removido do usuário com sucesso." };
 }
