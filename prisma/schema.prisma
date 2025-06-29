@@ -21,6 +21,8 @@ model User {
 
   albums Album[]
   banda Banda[]
+
+  avaliacoes AvaliacaoAlbum[]
 }
 
 model Album {
@@ -32,6 +34,7 @@ model Album {
   banda Banda @relation(fields: [bandaId], references: [id])
 
   seguidores User[]
+  avaliacoes AvaliacaoAlbum[]
 }
 
 model Banda {
@@ -42,4 +45,15 @@ model Banda {
 
   albums Album[]
   segudores User[]
+}
+
+model AvaliacaoAlbum {
+  id String @id @default(uuid())
+  nota Int
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  album Album @relation(fields: [albumId], references: [id])
+  albumId String
+
+  @@unique([userId, albumId]) // Um usuário só pode avaliar um álbum uma vez
 }
