@@ -11,3 +11,9 @@ export async function buscarAlbumPorUsuário(userId: string){
 
     return albums
 }
+
+export async function buscarAlbumaAvaliado(userId: string){
+    const avaliacoes = await prisma.avaliacaoAlbum.findMany({where: {userId}, include: {album: {include: {banda: true}}}})
+
+    return avaliacoes.map(avaliacao => ({album: avaliacao.album, nota: avaliacao.nota}))
+}

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { adicionarAlbumAoUsuario } from "../use-cases/adicinar-album";
 import { avaliarAlbum } from "../use-cases/avaliar-album";
+import { avaliacoesUsuario } from "../use-cases/avaliados-usuario";
 
 export async function adicionarAlbum(req: Request, res: Response){
     const { userId, nome, banda } = req.body
@@ -29,5 +30,17 @@ export async function avaliarAlbumUsuario(req: Request, res: Response){
     }catch(err){
         console.log(err)
         res.status(500).json({message: "Não foi possível avaliar o álbum"})
+    }
+}
+
+export async function buscarAvaliacoesUsuario(req: Request, res: Response){
+    const { userId } = req.params
+
+    try{
+        const avaliacoes = await avaliacoesUsuario(userId)
+        res.status(200).json({avaliacoes})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({message: "Não foi carregar os álbums avaliados"})
     }
 }
