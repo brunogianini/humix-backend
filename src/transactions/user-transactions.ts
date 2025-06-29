@@ -29,10 +29,11 @@ export async function listarTodosUsuarios(userId: string) {
     // Busca os usuários que o userId já segue
     const usuario = await prisma.user.findUnique({
         where: { id: userId },
-        select: { seguindo: { select: { id: true } } }
+        select: { seguindo: { select: { id: true } }, seguidores: { select: { id: true } } }
     });
 
     const idsSeguindo = usuario?.seguindo.map(u => u.id) ?? [];
+    const idsSeguidores = usuario?.seguidores.map(u => u.id) ?? [];
     // Inclui o próprio userId para não retornar ele mesmo
     idsSeguindo.push(userId);
 
@@ -48,7 +49,13 @@ export async function listarTodosUsuarios(userId: string) {
         }
     });
 
-    return usuarios;
+    // Adiciona o campo isFollower
+    const usuariosComIsFollower = usuarios.map(u => ({
+        ...u,
+        isFollower: idsSeguidores.includes(u.id)
+    }));
+
+    return usuariosComIsFollower;
 }
 
 export async function listarUsuariosSeguidos(userId: string) {
@@ -67,4 +74,33 @@ export async function listarUsuariosSeguidos(userId: string) {
 
     // Retorna apenas a lista de usuários seguidos
     return usuario?.seguindo ?? [];
+}
+
+export async function listarUsuariosQueMeSeguem(userId: string) {
+    // Busca quem me segue e quem eu sigo
+    const usuario = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+            seguidores: {
+                select: {
+                    id: true,
+                    nome: true,
+                    email: true
+                }
+            },
+            seguindo: {
+                select: { id: true }
+            }
+        }
+    });
+
+    const idsSeguindo = usuario?.seguindo.map(u => u.id) ?? [];
+
+    // Adiciona o campo isFollower (true se eu sigo de volta)
+    const seguidoresComIsFollower = usuario?.seguidores.map(u => ({
+        ...u,
+        isFollower: idsSeguindo.includes(u.id)
+    })) ?? [];
+
+    return seguidoresComIsFollower;
 }
