@@ -5,7 +5,7 @@ require('dotenv').config()
 
 const app = express()
 app.use(express.json())
-app.use(cors({ origin: 'https://www.blgianini.com' }))
+app.use(cors({ origin: '*' }))
 
 app.use(router)
 
